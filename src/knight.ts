@@ -9,9 +9,10 @@ const VELOCITY_Y = 800;
 
 class Knight extends Phaser.Sprite {
 
+    private canDoubleJump: boolean;
     private currentMove: string;
-    private jumpTime: number;
     private jumpKeyPushed: boolean;
+    private jumpTime: number;
 
     static loadAssets(game: Phaser.Game) {
         game.load.atlasJSONHash('knight-attack', 'assets/sprites/knight/attack.png', 'assets/sprites/knight/attack.json');
@@ -88,16 +89,19 @@ class Knight extends Phaser.Sprite {
             return;
         }
 
-        if (!this.isJumping() && !this.jumpKeyPushed) {
+        if (!this.jumpKeyPushed) {
             this.setAnimation('jump');
-            this.jumpTime = this.game.time.now;
-            this.body.velocity.y = -VELOCITY_Y;
-        } else if (this.body.blocked.up) {
-            this.jumpTime = null;
-        } else if (this.jumpTime && !this.jumpKeyPushed && (this.game.time.now - this.jumpTime) < 500) {
-            this.setAnimation('jump');
-            this.body.velocity.y = -Math.round(1.5 * VELOCITY_Y);
+
+            if (!this.isJumping()) {
+                this.body.velocity.y = -VELOCITY_Y;
+                this.canDoubleJump = true;
+                this.jumpTime = this.game.time.now;
+            } else if (this.canDoubleJump && (this.game.time.now - this.jumpTime) < 500) {
+                this.body.velocity.y = -Math.round(1.5 * VELOCITY_Y);
+                this.canDoubleJump = false;
+            }
         }
+
         this.jumpKeyPushed = true;
     }
 
