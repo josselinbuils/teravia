@@ -1,0 +1,35 @@
+{
+"frames": {
+	"Attack (01).png": {
+		"frame": {"x":466, "y":610, "w":389, "h":617},
+		"spriteSourceSize": {"x":56,"y":40,"w":587,"h":707},
+		"sourceSize": {"w":587,"h":707}
+	},
+	"Attack (02).png": {
+		"frame": {"x":856, "y":0, "w":364, "h":618},
+		"spriteSourceSize": {"x":74,"y":40,"w":587,"h":707},
+		"sourceSize": {"w":587,"h":707}
+	},
+	"Attack (03).png": {
+		"frame": {"x":856, "y":619, "w":356, "h":617},
+		"spriteSourceSize": {"x":69,"y":41,"w":587,"h":707},
+		"sourceSize": {"w":587,"h":707}
+	},
+	"Attack (04).png": {
+		"frame": {"x":0, "y":0, "w":497, "h":609},
+		"spriteSourceSize": {"x":43,"y":48,"w":587,"h":707},
+		"sourceSize": {"w":587,"h":707}
+	},
+	"Attack (05).png": {
+		"frame": {"x":0, "y":610, "w":465, "h":615},
+		"spriteSourceSize": {"x":45,"y":41,"w":587,"h":707},
+		"sourceSize": {"w":587,"h":707}
+	}
+
+},
+"meta": {
+	"image": "attack.png",
+	"size": {"w": 1221, "h": 1237},
+	"scale": "1"
+}
+}

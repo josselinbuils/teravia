@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="6" tilewidth="128" tileheight="128" nextobjectid="26">
+ <tileset firstgid="1" name="tileset" tilewidth="128" tileheight="128" tilecount="16" columns="8">
+  <image source="../images/tiles/tileset.png" width="1024" height="256"/>
+  <tile id="14">
+   <objectgroup draworder="index">
+    <object id="12" x="0" y="0" width="128" height="96"/>
+   </objectgroup>
+  </tile>
+ </tileset>
+ <tileset firstgid="17" name="Bone (1)" tilewidth="128" tileheight="128" tilecount="1" columns="1">
+  <image source="../images/tiles/Bone (1).png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="18" name="Bone (2)" tilewidth="128" tileheight="128" tilecount="1" columns="1">
+  <image source="../images/tiles/Bone (2).png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="19" name="Bone (3)" tilewidth="128" tileheight="128" tilecount="1" columns="1">
+  <image source="../images/tiles/Bone (3).png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="20" name="Bone (4)" tilewidth="128" tileheight="128" tilecount="1" columns="1">
+  <image source="../images/tiles/Bone (4).png" width="128" height="128"/>
+ </tileset>
+ <tileset firstgid="21" name="Tree" tilewidth="286" tileheight="239" tilecount="1" columns="1">
+  <image source="../images/objects/Tree.png" width="286" height="239"/>
+ </tileset>
+ <tileset firstgid="22" name="Skeleton" tilewidth="102" tileheight="50" tilecount="1" columns="1">
+  <image source="../images/objects/Skeleton.png" width="102" height="50"/>
+ </tileset>
+ <tileset firstgid="23" name="ArrowSign" tilewidth="86" tileheight="87" tilecount="1" columns="1">
+  <image source="../images/objects/ArrowSign.png" width="86" height="87"/>
+ </tileset>
+ <tileset firstgid="24" name="Bush (1)" tilewidth="182" tileheight="90" tilecount="1" columns="1">
+  <image source="../images/objects/Bush (1).png" width="182" height="90"/>
+ </tileset>
+ <tileset firstgid="25" name="Bush (2)" tilewidth="100" tileheight="64" tilecount="1" columns="1">
+  <image source="../images/objects/Bush (2).png" width="100" height="64"/>
+ </tileset>
+ <tileset firstgid="26" name="TombStone (1)" tilewidth="54" tileheight="55" tilecount="1" columns="1">
+  <image source="../images/objects/TombStone (1).png" width="54" height="55"/>
+ </tileset>
+ <tileset firstgid="27" name="TombStone (2)" tilewidth="53" tileheight="76" tilecount="1" columns="1">
+  <image source="../images/objects/TombStone (2).png" width="53" height="76"/>
+ </tileset>
+ <tileset firstgid="28" name="Crate" tilewidth="106" tileheight="106" tilecount="1" columns="1">
+  <image source="../images/objects/Crate.png" width="106" height="106"/>
+ </tileset>
+ <tileset firstgid="29" name="DeadBush" tilewidth="132" tileheight="74" tilecount="1" columns="1">
+  <image source="../images/objects/DeadBush.png" width="132" height="74"/>
+ </tileset>
+ <layer name="ground" width="30" height="6">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,1,2,2,2,2,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,14,15,15,16,0,0,0,12,9,9,9,9,13,0,0,0,0,0,0,0,0,0,0,0,0,1,2,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,5,
+2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,3,0,1,2,2,2,2,2,2,7,8,5
+</data>
+ </layer>
+ <objectgroup name="background">
+  <object id="15" gid="29" x="1536" y="640" width="132" height="74"/>
+  <object id="17" gid="28" x="1408" y="256" width="106" height="106"/>
+  <object id="18" gid="27" x="1792" y="256" width="53" height="76"/>
+  <object id="19" gid="26" x="640" y="384" width="54" height="55"/>
+  <object id="20" gid="25" x="896" y="640" width="100" height="64"/>
+  <object id="22" gid="24" x="2144" y="640" width="182" height="90"/>
+  <object id="23" gid="23" x="128" y="640" width="86" height="87"/>
+  <object id="24" gid="22" x="3712" y="384" width="102" height="50"/>
+  <object id="25" gid="21" x="2816" y="640" width="286" height="239"/>
+ </objectgroup>
+ <layer name="deco" width="30" height="6" opacity="0.5">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,18,
+0,0,19,0,0,0,0,0,17,0,0,0,0,0,0,0,18,0,0,0,0,20,0,0,0,19,0,0,0,0
+</data>
+ </layer>
+</map>

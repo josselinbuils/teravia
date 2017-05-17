@@ -1,0 +1,20 @@
+{
+  "name": "x",
+  "version": "0.0.1",
+  "description": "",
+  "scripts": {
+    "start": "webpack-dev-server -d --inline --hot --progress --no-info --port 9000",
+    "build": "rimraf ./dist && webpack -p"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^4.0.1",
+    "expose-loader": "^0.7.3",
+    "html-webpack-plugin": "^2.28.0",
+    "phaser": "^2.6.2",
+    "rimraf": "^2.6.1",
+    "ts-loader": "^2.0.3",
+    "typescript": "^2.3.2",
+    "webpack": "^2.5.1",
+    "webpack-dev-server": "^2.4.5"
+  }
+}
