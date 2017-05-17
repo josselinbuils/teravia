@@ -9,14 +9,15 @@ import {Level1} from './level1';
 const WIDTH = 1365;
 const HEIGHT = 768;
 
-class Teravia extends Phaser.Game {
+class Teravia {
     private cats;
     private cursors: Phaser.CursorKeys;
+    private game: Phaser.Game;
     private knight: Knight;
     private level: Level1;
 
     constructor() {
-        super(WIDTH, HEIGHT, Phaser.AUTO, 'content', this);
+        this.game = new Phaser.Game(WIDTH, HEIGHT, Phaser.AUTO, 'content', this);
     }
 
     preload(game) {
@@ -44,7 +45,7 @@ class Teravia extends Phaser.Game {
 
         this.game.camera.follow(this.knight);
 
-        game.physics.arcade.gravity.y = 3000;
+        game.physics.arcade.gravity.y = 1200;
 
         game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
@@ -55,7 +56,7 @@ class Teravia extends Phaser.Game {
         escapeKey.onDown.add(() => game.scale.stopFullScreen(), this);
     }
 
-    update(game) {
+    update() {
         let self = this,
             cursors = this.cursors,
             knight = this.knight;
@@ -96,12 +97,12 @@ class Teravia extends Phaser.Game {
         }
     }
 
-    render(game) {
+    // render(game) {
         // game.debug.bodyInfo(this.cat.sprite, 32, 32);
         //
         // game.debug.body(this.layer);
         // game.debug.body(this.cats[0].sprite);
-    }
+    // }
 }
 
 window.onload = () => new Teravia();

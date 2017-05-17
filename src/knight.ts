@@ -5,7 +5,7 @@ import * as Phaser from 'phaser';
 const ACC_X = 10000;
 const SCALE = 0.1;
 const VELOCITY_X = 700;
-const VELOCITY_Y = 800;
+const VELOCITY_Y = 500;
 
 class Knight extends Phaser.Sprite {
 
@@ -109,21 +109,15 @@ class Knight extends Phaser.Sprite {
 
         if (!this.isJumping()) {
             this.setAnimation('run');
-            this.scale.x = -SCALE;
+        }
 
-            if (this.body.velocity.x > -VELOCITY_X) {
-                this.body.acceleration.x = -ACC_X;
-            } else {
-                this.body.acceleration.x = 0;
-                this.body.velocity.x = -VELOCITY_X;
-            }
-        } else if (this.body.velocity.x > 0) {
-            this.body.acceleration.x = -Math.round(ACC_X / 3);
-        } else if (this.body.velocity.x < 0) {
+        this.scale.x = -SCALE;
+
+        if (this.body.velocity.x > -VELOCITY_X) {
+            this.body.acceleration.x = -ACC_X;
+        } else {
             this.body.acceleration.x = 0;
-        } else if (this.body.acceleration.x === 0) {
-            this.scale.x = -SCALE;
-            this.body.velocity.x = -Math.round(VELOCITY_X / 5);
+            this.body.velocity.x = -VELOCITY_X;
         }
     }
 
@@ -135,21 +129,15 @@ class Knight extends Phaser.Sprite {
 
         if (!this.isJumping()) {
             this.setAnimation('run');
-            this.scale.x = SCALE;
+        }
 
-            if (this.body.velocity.x < VELOCITY_X) {
-                this.body.acceleration.x = ACC_X;
-            } else {
-                this.body.acceleration.x = 0;
-                this.body.velocity.x = VELOCITY_X;
-            }
-        } else if (this.body.velocity.x < 0) {
-            this.body.acceleration.x = Math.round(ACC_X / 3);
-        } else if (this.body.velocity.x > 0) {
+        this.scale.x = SCALE;
+
+        if (this.body.velocity.x < VELOCITY_X) {
+            this.body.acceleration.x = ACC_X;
+        } else {
             this.body.acceleration.x = 0;
-        } else if (this.body.acceleration.x === 0) {
-            this.scale.x = SCALE;
-            this.body.velocity.x = Math.round(VELOCITY_X / 5);
+            this.body.velocity.x = VELOCITY_X;
         }
     }
 
