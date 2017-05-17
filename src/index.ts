@@ -45,7 +45,7 @@ class Teravia {
 
         this.game.camera.follow(this.knight);
 
-        game.physics.arcade.gravity.y = 1200;
+        game.physics.arcade.gravity.y = 3000;
 
         game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
@@ -68,7 +68,13 @@ class Teravia {
 
         this.cats.forEach(function (cat) {
             if (cat.alive) {
-                self.game.physics.arcade.collide(self.knight, cat, (knight, cat) => knight.isAttacking() && cat.die());
+                let distance = self.game.physics.arcade.distanceBetween(self.knight, cat);
+
+                if (distance < 60 && self.knight.isAttacking()) {
+                    return cat.die();
+                }
+
+                self.game.physics.arcade.collide(self.knight, cat);
                 cat.update();
             }
         });
@@ -98,10 +104,10 @@ class Teravia {
     }
 
     // render(game) {
-        // game.debug.bodyInfo(this.cat.sprite, 32, 32);
-        //
-        // game.debug.body(this.layer);
-        // game.debug.body(this.cats[0].sprite);
+    // game.debug.bodyInfo(this.cat.sprite, 32, 32);
+    //
+    // game.debug.body(this.layer);
+    // game.debug.body(this.cats[0].sprite);
     // }
 }
 

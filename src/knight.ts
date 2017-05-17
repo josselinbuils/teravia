@@ -5,7 +5,7 @@ import * as Phaser from 'phaser';
 const ACC_X = 10000;
 const SCALE = 0.1;
 const VELOCITY_X = 700;
-const VELOCITY_Y = 500;
+const VELOCITY_Y = 800;
 
 class Knight extends Phaser.Sprite {
 
