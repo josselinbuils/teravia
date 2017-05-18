@@ -1,6 +1,7 @@
 import 'pixi';
 import 'p2';
 import * as Phaser from 'phaser';
+import {HealthBar} from './healthbar';
 
 const SCALE_BLOOD = 0.2;
 const SCALE_CAT = 0.2;
@@ -11,6 +12,8 @@ class Cat extends Phaser.Sprite {
     alive: boolean;
 
     private blood: Phaser.Sprite;
+    private healthBar: HealthBar;
+    private life: number;
     private xMin: number;
     private xMax: number;
 
@@ -56,23 +59,22 @@ class Cat extends Phaser.Sprite {
         this.body.collideWorldBounds = true;
         this.body.immovable = true;
 
+        this.life = 100;
         this.alive = true;
     }
 
-    die() {
-        if (this.alive) {
-            let sens = this.body.velocity.x / VELOCITY;
-            this.alive = false;
-            this.loadTexture('cat-dead', 0);
-            this.animations.play('dead');
-            this.blood.visible = true;
-            this.blood.x = this.body.x + (sens < 0 ? 55 : 5);
-            this.blood.y = this.body.y + 50;
-            this.blood.scale.set(-sens * SCALE_BLOOD, SCALE_BLOOD);
-            this.blood.animations.play('blood');
-            this.body.velocity.x = 0;
-        } else {
-            this.position.y -= 1;
+    hurt() {
+        this.life = Math.max(0, this.life - 100 / 3);
+
+        if (!this.healthBar) {
+            this.healthBar = new HealthBar(this.game);
+        }
+
+        this.healthBar.setPercent(this.life);
+        this.updateHealthBarPosition();
+
+        if (this.life === 0) {
+            this.die();
         }
     }
 
@@ -91,6 +93,28 @@ class Cat extends Phaser.Sprite {
             this.scale.set(-SCALE_CAT, SCALE_CAT);
             this.body.velocity.x = -VELOCITY;
         }
+
+        if (this.healthBar) {
+            this.updateHealthBarPosition();
+        }
+    }
+
+    private die() {
+        let sens = this.body.velocity.x / VELOCITY;
+        this.alive = false;
+        this.loadTexture('cat-dead', 0);
+        this.animations.play('dead');
+        this.blood.visible = true;
+        this.blood.x = this.body.x + (sens < 0 ? 55 : 5);
+        this.blood.y = this.body.y + 50;
+        this.blood.scale.set(-sens * SCALE_BLOOD, SCALE_BLOOD);
+        this.blood.animations.play('blood');
+        this.body.velocity.x = 0;
+        this.healthBar.kill();
+    }
+
+    private updateHealthBarPosition() {
+        this.healthBar.setPosition(this.x, this.y - 20);
     }
 }
 

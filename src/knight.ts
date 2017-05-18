@@ -58,17 +58,16 @@ class Knight extends Phaser.Sprite {
         this.scale.y = SCALE;
 
         this.setAnimation('idle');
-
-        let spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-        spaceKey.onDown.add(() => this.attack(), this);
     }
 
-    attack() {
+    attack(): boolean {
         if (!this.isJumping()) {
             this.setAnimation('attack');
             this.body.acceleration.x = 0;
             this.body.velocity.x = 0;
+            return true;
         }
+        return false;
     }
 
     idle() {

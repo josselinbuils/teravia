@@ -54,6 +54,21 @@ class Teravia {
 
         let escapeKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
         escapeKey.onDown.add(() => game.scale.stopFullScreen(), this);
+
+        let spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        spaceKey.onDown.add(() => {
+            if (this.knight.attack()) {
+                this.cats.forEach(function (cat) {
+                    if (cat.alive) {
+                        let distance = this.game.physics.arcade.distanceBetween(this.knight, cat);
+
+                        if (distance < 70) {
+                            cat.hurt();
+                        }
+                    }
+                }, this);
+            }
+        }, this);
     }
 
     update() {
@@ -68,12 +83,6 @@ class Teravia {
 
         this.cats.forEach(function (cat) {
             if (cat.alive) {
-                let distance = self.game.physics.arcade.distanceBetween(self.knight, cat);
-
-                if (distance < 60 && self.knight.isAttacking()) {
-                    return cat.die();
-                }
-
                 self.game.physics.arcade.collide(self.knight, cat);
                 cat.update();
             }
