@@ -17,7 +17,7 @@ module.exports = {
     },
     plugins: [
         new CopyWebpackPlugin([{
-            from: './src/assets',
+            from: './src/assets/dist',
             to: './assets'
         }]),
         new HtmlWebpackPlugin({

@@ -3,7 +3,7 @@ import 'p2';
 import * as Phaser from 'phaser';
 import {HealthBar} from './healthbar';
 
-const SCALE_BLOOD = 0.2;
+const SCALE_BLOOD = 1;
 const SCALE_CAT = 1;
 const VELOCITY = 100;
 
@@ -15,14 +15,20 @@ class Cat extends Phaser.Sprite {
     private life: number;
     private player: Phaser.Sprite;
     private playerDetected: boolean;
+    private sounds: {
+        die: Phaser.Sound,
+        meow: Phaser.Sound
+    };
     private xMin: number;
     private xMax: number;
 
     static loadAssets(game: Phaser.Game): void {
+        game.load.atlasJSONHash('cat-blood', 'assets/sprites/cat/blood.png', 'assets/sprites/cat/blood.json');
         game.load.atlasJSONHash('cat-dead', 'assets/sprites/cat/dead.png', 'assets/sprites/cat/dead.json');
         game.load.atlasJSONHash('cat-run', 'assets/sprites/cat/run.png', 'assets/sprites/cat/run.json');
         game.load.atlasJSONHash('cat-walk', 'assets/sprites/cat/walk.png', 'assets/sprites/cat/walk.json');
-        game.load.atlasJSONHash('blood', 'assets/sprites/blood.png', 'assets/sprites/blood.json');
+        game.load.audio('cat-die', 'assets/audio/cat/die.wav');
+        game.load.audio('cat-meow', 'assets/audio/cat/meow.m4a');
     }
 
     constructor(game: Phaser.Game, player: Phaser.Sprite, xMin: number, y: number, sens: number) {
@@ -40,13 +46,15 @@ class Cat extends Phaser.Sprite {
         this.scale.set(sens * SCALE_CAT, SCALE_CAT);
         this.anchor.x = 0.5;
 
-        this.blood = game.add.sprite(0, 0, 'blood');
+        this.blood = game.add.sprite(0, 0, 'cat-blood');
         this.blood.scale.set(SCALE_BLOOD, SCALE_BLOOD);
         this.blood.anchor.x = 0.5;
         this.blood.visible = false;
 
-        this.blood.animations.add('blood', null, 10);
-
+        let bloodAnim = this.blood.animations.add('cat-blood', null, 10);
+        bloodAnim.onComplete.add(() => {
+            this.blood.visible = false;
+        }, this);
 
         let deadAnim = this.animations.add('dead', null, 10);
         deadAnim.onComplete.add(() => {
@@ -65,7 +73,11 @@ class Cat extends Phaser.Sprite {
         this.body.velocity.y = 0;
         this.body.bounce.y = 0.3;
         this.body.collideWorldBounds = true;
-        // this.body.immovable = true;
+
+        this.sounds = {
+            die: game.add.audio('cat-die'),
+            meow: game.add.audio('cat-meow')
+        };
 
         this.life = 100;
         this.alive = true;
@@ -80,31 +92,23 @@ class Cat extends Phaser.Sprite {
 
         this.healthBar.setPercent(this.life);
         this.updateHealthBarPosition();
+        this.showBlood();
 
         if (this.life === 0) {
             this.kill();
-        } else if (!this.hasSamePlayerDirection()) {
+        } else if (!this.isPlayerVisible()) {
             this.body.velocity.x *= -1;
             this.scale.x *= -1;
         }
     }
 
     kill(): Phaser.Sprite {
-        let sens = this.body.velocity.x / VELOCITY;
-
         this.alive = false;
-
+        this.updateBloodPosition(true);
         this.setAnimation('dead');
-
-        this.blood.visible = true;
-        this.blood.x = this.body.x + (sens < 0 ? 55 : 5);
-        this.blood.y = this.body.y + 50;
-        this.blood.scale.set(-sens * SCALE_BLOOD, SCALE_BLOOD);
-        this.blood.animations.play('blood');
+        this.sounds.die.play();
         this.body.velocity.x = 0;
-
         this.healthBar.destroy();
-
         return this;
     }
 
@@ -135,10 +139,14 @@ class Cat extends Phaser.Sprite {
             isVisible = Math.abs(this.player.y - this.y) <= 200;
 
         if (isVisible && distance < 500) {
-            if (this.hasSamePlayerDirection()) {
+            if (this.isPlayerVisible()) {
                 this.body.velocity.x = this.scale.x / SCALE_CAT * VELOCITY * 2;
-                this.setAnimation('run');
-                this.playerDetected = true;
+
+                if (!this.playerDetected) {
+                    this.setAnimation('run');
+                    this.sounds.meow.play();
+                    this.playerDetected = true;
+                }
             }
         } else {
             this.body.velocity.x = this.scale.x / SCALE_CAT * VELOCITY;
@@ -149,10 +157,21 @@ class Cat extends Phaser.Sprite {
         if (this.healthBar) {
             this.updateHealthBarPosition();
         }
+
+        if (this.blood.visible) {
+            this.updateBloodPosition();
+        }
     }
 
-    private hasSamePlayerDirection(): boolean {
+    private isPlayerVisible(): boolean {
         return (this.player.x < this.x && this.scale.x < 0) || (this.player.x > this.x && this.scale.x > 0);
+    }
+
+    private showBlood(): void {
+        this.blood.visible = true;
+        this.updateBloodPosition();
+        this.blood.animations.stop();
+        this.blood.animations.play('cat-blood');
     }
 
     private setAnimation(name: string): void {
@@ -161,6 +180,14 @@ class Cat extends Phaser.Sprite {
             this.animations.play(name);
             this.currentMove = name;
         }
+    }
+
+    private updateBloodPosition(dying=false) {
+        let sens = this.scale.x / SCALE_CAT,
+            offset = dying ? 20 : 0;
+        this.blood.x = this.body.x + (sens < 0 ? 25 + offset : 30 - offset);
+        this.blood.y = this.body.y + 10;
+        this.blood.scale.set(-sens * SCALE_BLOOD, SCALE_BLOOD);
     }
 
     private updateHealthBarPosition(): void {

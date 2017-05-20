@@ -64,7 +64,7 @@ class Knight extends Phaser.Sprite {
 
         this.attackSound = game.add.audio('knight-sword');
 
-        this.attack = _.throttle(this.attack, 150);
+        this.attack = _.throttle(this.attack, 200);
 
         this.setAnimation('idle');
     }
