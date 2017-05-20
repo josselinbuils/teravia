@@ -1,35 +1,35 @@
 {
 "frames": {
-	"Attack (01).png": {
-		"frame": {"x":466, "y":610, "w":389, "h":617},
-		"spriteSourceSize": {"x":56,"y":40,"w":587,"h":707},
-		"sourceSize": {"w":587,"h":707}
+	"Attack (1).png": {
+		"frame": {"x":76, "y":97, "w":63, "h":98},
+		"spriteSourceSize": {"x":6,"y":3,"w":88,"h":106},
+		"sourceSize": {"w":88,"h":106}
 	},
-	"Attack (02).png": {
-		"frame": {"x":856, "y":0, "w":364, "h":618},
-		"spriteSourceSize": {"x":74,"y":40,"w":587,"h":707},
-		"sourceSize": {"w":587,"h":707}
+	"Attack (2).png": {
+		"frame": {"x":140, "y":0, "w":60, "h":98},
+		"spriteSourceSize": {"x":8,"y":3,"w":88,"h":106},
+		"sourceSize": {"w":88,"h":106}
 	},
-	"Attack (03).png": {
-		"frame": {"x":856, "y":619, "w":356, "h":617},
-		"spriteSourceSize": {"x":69,"y":41,"w":587,"h":707},
-		"sourceSize": {"w":587,"h":707}
+	"Attack (3).png": {
+		"frame": {"x":140, "y":99, "w":58, "h":98},
+		"spriteSourceSize": {"x":8,"y":3,"w":88,"h":106},
+		"sourceSize": {"w":88,"h":106}
 	},
-	"Attack (04).png": {
-		"frame": {"x":0, "y":0, "w":497, "h":609},
-		"spriteSourceSize": {"x":43,"y":48,"w":587,"h":707},
-		"sourceSize": {"w":587,"h":707}
+	"Attack (4).png": {
+		"frame": {"x":0, "y":0, "w":79, "h":96},
+		"spriteSourceSize": {"x":4,"y":5,"w":88,"h":106},
+		"sourceSize": {"w":88,"h":106}
 	},
-	"Attack (05).png": {
-		"frame": {"x":0, "y":610, "w":465, "h":615},
-		"spriteSourceSize": {"x":45,"y":41,"w":587,"h":707},
-		"sourceSize": {"w":587,"h":707}
+	"Attack (5).png": {
+		"frame": {"x":0, "y":97, "w":75, "h":98},
+		"spriteSourceSize": {"x":4,"y":3,"w":88,"h":106},
+		"sourceSize": {"w":88,"h":106}
 	}
 
 },
 "meta": {
-	"image": "attack.png",
-	"size": {"w": 1221, "h": 1237},
+	"image": "sprites.png",
+	"size": {"w": 201, "h": 198},
 	"scale": "1"
 }
 }

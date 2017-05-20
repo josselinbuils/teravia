@@ -10,6 +10,9 @@ class Level1 {
 
     constructor(game: Phaser.Game) {
 
+        let music = game.add.audio('music');
+        music.play();
+
         let background = game.add.tileSprite(0, 0, WIDTH, HEIGHT, 'background');
         background.fixedToCamera = true;
 
@@ -49,6 +52,7 @@ class Level1 {
     }
 
     static loadAssets(game: Phaser.Game) {
+        game.load.audio('music', 'assets/audio/come_and_Find_Me.mp3');
         game.load.tilemap('map', 'assets/tilemaps/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.image('background', 'assets/images/BG_resize.png');
         game.load.image('tileset', 'assets/images/tiles/tileset.png');

@@ -3,7 +3,7 @@ import 'p2';
 import * as Phaser from 'phaser';
 
 const ACC_X = 10000;
-const SCALE = 0.1;
+const SCALE = 1;
 const VELOCITY_X = 700;
 const VELOCITY_Y = 800;
 
@@ -64,13 +64,17 @@ class Knight extends Phaser.Sprite {
         if (!this.isJumping()) {
             this.setAnimation('attack');
             this.body.acceleration.x = 0;
-            this.body.velocity.x = 0;
+            this.body.velocity.x = Math.round(this.body.velocity.x / 2);
             return true;
         }
         return false;
     }
 
-    idle() {
+    canHurt(enemy: Phaser.Sprite): boolean {
+        return (enemy.x < this.x && this.scale.x < 0) || (enemy.x > this.x && this.scale.x > 0);
+    }
+
+    idle(): void {
         if (!this.isBusy()) {
             this.setAnimation('idle');
             this.body.velocity.x = 0;
@@ -78,11 +82,15 @@ class Knight extends Phaser.Sprite {
         this.body.acceleration.x = 0;
     }
 
-    isAttacking() {
+    isAttacking(): boolean {
         return this.isPlaying('attack');
     }
 
-    jump() {
+    isJumping(): boolean {
+        return this.body && !this.body.blocked.down && !this.body.touching.down;
+    }
+
+    jump(): void {
 
         if (this.isAttacking()) {
             return;
@@ -104,7 +112,7 @@ class Knight extends Phaser.Sprite {
         this.jumpKeyPushed = true;
     }
 
-    moveLeft() {
+    moveLeft(): void {
 
         if (this.isAttacking()) {
             return;
@@ -124,7 +132,7 @@ class Knight extends Phaser.Sprite {
         }
     }
 
-    moveRight() {
+    moveRight(): void {
 
         if (this.isAttacking()) {
             return;
@@ -144,24 +152,20 @@ class Knight extends Phaser.Sprite {
         }
     }
 
-    releaseJumpKey() {
+    releaseJumpKey(): void {
         this.jumpKeyPushed = false;
     }
 
-    private isBusy() {
+    private isBusy(): boolean {
         return this.isJumping() || this.isAttacking();
     }
 
-    private isPlaying(animation) {
+    private isPlaying(animation): boolean {
         let currentAnim = this.animations.currentAnim;
         return currentAnim.name === animation && currentAnim.isPlaying;
     }
 
-    private isJumping() {
-        return this.body && !this.body.blocked.down && !this.body.touching.down;
-    }
-
-    private setAnimation(name: string) {
+    private setAnimation(name: string): void {
         if (this.currentMove !== name) {
             this.loadTexture('knight-' + name, 0);
             this.animations.play(name);

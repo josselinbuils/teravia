@@ -4,7 +4,7 @@ import * as Phaser from 'phaser';
 import {HealthBar} from './healthbar';
 
 const SCALE_BLOOD = 0.2;
-const SCALE_CAT = 0.2;
+const SCALE_CAT = 1;
 const VELOCITY = 100;
 
 class Cat extends Phaser.Sprite {

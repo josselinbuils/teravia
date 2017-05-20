@@ -57,12 +57,12 @@ class Teravia {
 
         let spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         spaceKey.onDown.add(() => {
-            if (this.knight.attack()) {
+            if (this.knight.attack() && !this.knight.isJumping()) {
                 this.cats.forEach(function (cat) {
-                    if (cat.alive) {
+                    if (cat.alive && this.knight.canHurt(cat)) {
                         let distance = this.game.physics.arcade.distanceBetween(this.knight, cat);
 
-                        if (distance < 70) {
+                        if (distance < 80) {
                             cat.hurt();
                         }
                     }
@@ -83,8 +83,8 @@ class Teravia {
 
         this.cats.forEach(function (cat) {
             if (cat.alive) {
-                self.game.physics.arcade.collide(self.knight, cat);
                 cat.update();
+                self.game.physics.arcade.collide(self.knight, cat);
             }
         });
 
