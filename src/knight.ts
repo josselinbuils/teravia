@@ -49,6 +49,7 @@ class Knight extends Phaser.Sprite {
 
         this.anchor.x = 0.5;
 
+        this.body.setSize(this.width, this.height - 4, 0, 0);
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
         this.body.bounce.y = 0;
@@ -62,7 +63,7 @@ class Knight extends Phaser.Sprite {
 
     attack(): boolean {
         if (!this.isJumping()) {
-            this.setAnimation('attack');
+            this.setAnimation('attack', true);
             this.body.acceleration.x = 0;
             this.body.velocity.x = Math.round(this.body.velocity.x / 2);
             return true;
@@ -97,7 +98,7 @@ class Knight extends Phaser.Sprite {
         }
 
         if (!this.jumpKeyPushed) {
-            this.setAnimation('jump');
+            this.setAnimation('jump', true);
 
             if (!this.isJumping()) {
                 this.body.velocity.y = -VELOCITY_Y;
@@ -165,11 +166,14 @@ class Knight extends Phaser.Sprite {
         return currentAnim.name === animation && currentAnim.isPlaying;
     }
 
-    private setAnimation(name: string): void {
+    private setAnimation(name: string, restart=false): void {
         if (this.currentMove !== name) {
             this.loadTexture('knight-' + name, 0);
             this.animations.play(name);
             this.currentMove = name;
+        } else if (restart) {
+            this.animations.stop();
+            this.animations.play(name);
         }
     }
 }

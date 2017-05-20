@@ -40,8 +40,6 @@ class Cat extends Phaser.Sprite {
         this.blood.anchor.x = 0.5;
         this.blood.visible = false;
 
-        let sprite = this;
-
         let bloodAnim = this.blood.animations.add('blood', null, 10);
         bloodAnim.killOnComplete = true;
 
@@ -51,8 +49,9 @@ class Cat extends Phaser.Sprite {
         this.animations.add('walk', null, 15, true);
         this.animations.play('walk');
 
-        game.physics.arcade.enable(sprite);
+        game.physics.arcade.enable(this);
 
+        this.body.setSize(sens * this.width, this.height - 4, 0, 0);
         this.body.velocity.x = sens * 100;
         this.body.velocity.y = 0;
         this.body.bounce.y = 0.3;
