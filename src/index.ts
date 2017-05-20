@@ -34,16 +34,15 @@ class Teravia {
         this.cursors = game.input.keyboard.createCursorKeys();
 
         this.level = new Level1(game);
+        this.player = new Knight(game, 30, HEIGHT / 2);
 
         this.enemies = game.add.group();
 
         for (let i = 0; i < 3; i++) {
-            let enemy = new Cat(game, 400 + (i * 600), HEIGHT - 205, i % 2 === 0 ? 1 : -1);
+            let enemy = new Cat(game, this.player, 400 + (i * 600), HEIGHT - 205, i % 2 === 0 ? 1 : -1);
             this.enemies.add(enemy);
             enemy.events.onDestroy.add(() => this.enemies.remove(enemy), this);
         }
-
-        this.player = new Knight(game, 30, HEIGHT / 2);
 
         this.game.camera.follow(this.player);
 
