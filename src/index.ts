@@ -10,24 +10,24 @@ const WIDTH = 1365;
 const HEIGHT = 768;
 
 class Teravia {
-    private cats;
     private cursors: Phaser.CursorKeys;
+    private enemies: Phaser.Group;
     private game: Phaser.Game;
-    private knight: Knight;
+    private player: Knight;
     private level: Level1;
 
     constructor() {
         this.game = new Phaser.Game(WIDTH, HEIGHT, Phaser.AUTO, 'content', this);
     }
 
-    preload(game) {
+    preload(game): void {
         // game.time.advancedTiming = true;
         Cat.loadAssets(game);
         Level1.loadAssets(game);
         Knight.loadAssets(game);
     }
 
-    create(game) {
+    create(game): void {
         game.physics.startSystem(Phaser.Physics.ARCADE);
         game.physics.arcade.TILE_BIAS = 32;
 
@@ -35,15 +35,17 @@ class Teravia {
 
         this.level = new Level1(game);
 
-        this.cats = game.add.group();
+        this.enemies = game.add.group();
 
         for (let i = 0; i < 3; i++) {
-            this.cats.add(new Cat(game, 400 + (i * 600), HEIGHT - 205, i % 2 === 0 ? 1 : -1));
+            let enemy = new Cat(game, 400 + (i * 600), HEIGHT - 205, i % 2 === 0 ? 1 : -1);
+            this.enemies.add(enemy);
+            enemy.events.onDestroy.add(() => this.enemies.remove(enemy), this);
         }
 
-        this.knight = new Knight(game, 30, HEIGHT / 2);
+        this.player = new Knight(game, 30, HEIGHT / 2);
 
-        this.game.camera.follow(this.knight);
+        this.game.camera.follow(this.player);
 
         game.physics.arcade.gravity.y = 3000;
 
@@ -57,13 +59,13 @@ class Teravia {
 
         let spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         spaceKey.onDown.add(() => {
-            if (this.knight.attack() && !this.knight.isJumping()) {
-                this.cats.forEach(function (cat) {
-                    if (cat.alive && this.knight.canHurt(cat)) {
-                        let distance = this.game.physics.arcade.distanceBetween(this.knight, cat);
+            if (this.player.attack() && !this.player.isJumping()) {
+                this.enemies.forEach(function (enemy) {
+                    if (enemy.alive && this.player.canHurt(enemy)) {
+                        let distance = this.game.physics.arcade.distanceBetween(this.player, enemy);
 
                         if (distance < 80) {
-                            cat.hurt();
+                            enemy.hurt();
                         }
                     }
                 }, this);
@@ -71,44 +73,38 @@ class Teravia {
         }, this);
     }
 
-    update() {
+    update(): void {
         let self = this,
             cursors = this.cursors,
-            knight = this.knight;
+            player = this.player;
 
         // game.debug.text(game.time.fps || '--', 2, 14, '#00ff00');
 
-        this.game.physics.arcade.collide(this.knight, this.level.ground);
-        this.game.physics.arcade.collide(this.cats, this.level.ground);
-
-        this.cats.forEach(function (cat) {
-            if (cat.alive) {
-                cat.update();
-                self.game.physics.arcade.collide(self.knight, cat);
-            }
-        });
+        this.game.physics.arcade.collide(this.player, this.level.ground);
+        this.game.physics.arcade.collide(this.enemies, this.level.ground);
+        this.enemies.forEach(enemy => enemy.alive && this.game.physics.arcade.collide(self.player, enemy), this);
 
         let move = false;
 
         if (cursors.left.isDown) {
-            knight.moveLeft();
+            player.moveLeft();
             move = true;
         }
 
         if (cursors.right.isDown) {
-            knight.moveRight();
+            player.moveRight();
             move = true;
         }
 
         if (cursors.up.isDown) {
-            knight.jump();
+            player.jump();
             move = true;
         } else {
-            knight.releaseJumpKey();
+            player.releaseJumpKey();
         }
 
         if (!move) {
-            knight.idle();
+            player.idle();
         }
     }
 

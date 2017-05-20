@@ -20,9 +20,9 @@ class HealthBar {
         this.setPercent(100);
     }
 
-    kill() {
-        this.bgSprite.kill();
-        this.barSprite.kill();
+    destroy() {
+        this.bgSprite.destroy();
+        this.barSprite.destroy();
     }
 
     setFixedToCamera(fixedToCamera: boolean) {

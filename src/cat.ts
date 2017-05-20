@@ -9,15 +9,13 @@ const VELOCITY = 100;
 
 class Cat extends Phaser.Sprite {
 
-    alive: boolean;
-
     private blood: Phaser.Sprite;
     private healthBar: HealthBar;
     private life: number;
     private xMin: number;
     private xMax: number;
 
-    static loadAssets(game: Phaser.Game) {
+    static loadAssets(game: Phaser.Game): void {
         game.load.atlasJSONHash('cat-dead', 'assets/sprites/cat/dead.png', 'assets/sprites/cat/dead.json');
         game.load.atlasJSONHash('cat-walk', 'assets/sprites/cat/walk.png', 'assets/sprites/cat/walk.json');
         game.load.atlasJSONHash('blood', 'assets/sprites/blood.png', 'assets/sprites/blood.json');
@@ -40,11 +38,13 @@ class Cat extends Phaser.Sprite {
         this.blood.anchor.x = 0.5;
         this.blood.visible = false;
 
-        let bloodAnim = this.blood.animations.add('blood', null, 10);
-        bloodAnim.killOnComplete = true;
+        this.blood.animations.add('blood', null, 10);
 
         let deadAnim = this.animations.add('dead', null, 10);
-        deadAnim.killOnComplete = true;
+        deadAnim.onComplete.add(() => {
+            this.destroy();
+            this.blood.destroy();
+        }, this);
 
         this.animations.add('walk', null, 15, true);
         this.animations.play('walk');
@@ -58,11 +58,13 @@ class Cat extends Phaser.Sprite {
         this.body.collideWorldBounds = true;
         this.body.immovable = true;
 
+        // this.tint = 0xff0000;
+
         this.life = 100;
         this.alive = true;
     }
 
-    hurt() {
+    hurt(): void {
         this.life = Math.max(0, this.life - 100 / 3);
 
         if (!this.healthBar) {
@@ -73,12 +75,32 @@ class Cat extends Phaser.Sprite {
         this.updateHealthBarPosition();
 
         if (this.life === 0) {
-            this.die();
+            this.kill();
         }
     }
 
-    update() {
+    kill(): Phaser.Sprite {
+        let sens = this.body.velocity.x / VELOCITY;
 
+        this.alive = false;
+        this.loadTexture('cat-dead', 0);
+        this.animations.play('dead');
+
+        this.blood.visible = true;
+        this.blood.x = this.body.x + (sens < 0 ? 55 : 5);
+        this.blood.y = this.body.y + 50;
+        this.blood.scale.set(-sens * SCALE_BLOOD, SCALE_BLOOD);
+        this.blood.animations.play('blood');
+        this.body.velocity.x = 0;
+
+        this.healthBar.destroy();
+
+        return this;
+    }
+
+    update(): void {
+
+        // Useful when dead animation is playing
         if (!this.alive) {
             return;
         }
@@ -98,21 +120,7 @@ class Cat extends Phaser.Sprite {
         }
     }
 
-    private die() {
-        let sens = this.body.velocity.x / VELOCITY;
-        this.alive = false;
-        this.loadTexture('cat-dead', 0);
-        this.animations.play('dead');
-        this.blood.visible = true;
-        this.blood.x = this.body.x + (sens < 0 ? 55 : 5);
-        this.blood.y = this.body.y + 50;
-        this.blood.scale.set(-sens * SCALE_BLOOD, SCALE_BLOOD);
-        this.blood.animations.play('blood');
-        this.body.velocity.x = 0;
-        this.healthBar.kill();
-    }
-
-    private updateHealthBarPosition() {
+    private updateHealthBarPosition(): void {
         this.healthBar.setPosition(this.x, this.y - 20);
     }
 }
