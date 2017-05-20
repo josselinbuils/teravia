@@ -31,7 +31,7 @@ class Level1 {
     constructor(game: Phaser.Game) {
 
         let music = game.add.audio('music');
-        // music.play();
+        music.play();
 
         let background = game.add.tileSprite(0, 0, WIDTH, HEIGHT, 'background');
         background.fixedToCamera = true;

@@ -38,8 +38,8 @@ class Teravia {
 
         this.enemies = game.add.group();
 
-        for (let i = 0; i < 3; i++) {
-            let enemy = new Cat(game, this.player, 400 + (i * 600), HEIGHT - 205, i % 2 === 0 ? 1 : -1);
+        for (let i = 0; i < 4; i++) {
+            let enemy = new Cat(game, this.player, 400 + (i * 750), HEIGHT - 205, i % 2 === 0 ? 1 : -1);
             this.enemies.add(enemy);
             enemy.events.onDestroy.add(() => this.enemies.remove(enemy), this);
         }

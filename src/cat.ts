@@ -72,6 +72,7 @@ class Cat extends Phaser.Sprite {
         this.body.velocity.x = sens * 100;
         this.body.velocity.y = 0;
         this.body.bounce.y = 0.3;
+        this.body.friction = 1;
         this.body.collideWorldBounds = true;
 
         this.sounds = {
@@ -119,6 +120,8 @@ class Cat extends Phaser.Sprite {
             return;
         }
 
+        let distance = this.game.physics.arcade.distanceBetween(this.player, this);
+
         if (!this.playerDetected) {
             let sens = this.scale.x / SCALE_CAT;
 
@@ -129,14 +132,13 @@ class Cat extends Phaser.Sprite {
                 this.scale.set(-SCALE_CAT, SCALE_CAT);
                 this.body.velocity.x = -VELOCITY;
             }
-        } else {
+        } else if (distance > 100) {
             let sens = this.player.x < this.x ? -1 : 1;
             this.scale.set(sens * SCALE_CAT, SCALE_CAT);
             this.body.velocity.x = sens * VELOCITY * 2;
         }
 
-        let distance = this.game.physics.arcade.distanceBetween(this.player, this),
-            isVisible = Math.abs(this.player.y - this.y) <= 200;
+        let isVisible = Math.abs(this.player.y - this.y) <= 200;
 
         if (isVisible && distance < 500) {
             if (this.isPlayerVisible()) {
@@ -182,7 +184,7 @@ class Cat extends Phaser.Sprite {
         }
     }
 
-    private updateBloodPosition(dying=false) {
+    private updateBloodPosition(dying = false) {
         let sens = this.scale.x / SCALE_CAT,
             offset = dying ? 20 : 0;
         this.blood.x = this.body.x + (sens < 0 ? 25 + offset : 30 - offset);
