@@ -54,18 +54,18 @@ class Cat extends Phaser.Sprite {
             this.blood.destroy();
         }, this);
 
-        this.animations.add('run', null, 30, true);
+        this.animations.add('run', null, 25, true);
         this.animations.add('walk', null, 15, true);
         this.animations.play('walk');
 
         game.physics.arcade.enable(this);
 
-        this.body.setSize(sens * this.width, this.height - 4, 0, 0);
+        this.body.setSize(Math.abs(this.width) - 52, this.height - 10, 23, 7);
         this.body.velocity.x = sens * 100;
         this.body.velocity.y = 0;
         this.body.bounce.y = 0.3;
         this.body.collideWorldBounds = true;
-        this.body.immovable = true;
+        // this.body.immovable = true;
 
         this.life = 100;
         this.alive = true;

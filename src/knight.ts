@@ -1,6 +1,7 @@
 import 'pixi';
 import 'p2';
 import * as Phaser from 'phaser';
+import * as _ from 'underscore';
 
 const ACC_X = 10000;
 const SCALE = 1;
@@ -9,6 +10,7 @@ const VELOCITY_Y = 800;
 
 class Knight extends Phaser.Sprite {
 
+    private attackSound: Phaser.Sound;
     private canDoubleJump: boolean;
     private currentMove: string;
     private jumpKeyPushed: boolean;
@@ -19,6 +21,8 @@ class Knight extends Phaser.Sprite {
         game.load.atlasJSONHash('knight-idle', 'assets/sprites/knight/idle.png', 'assets/sprites/knight/idle.json');
         game.load.atlasJSONHash('knight-jump', 'assets/sprites/knight/jump.png', 'assets/sprites/knight/jump.json');
         game.load.atlasJSONHash('knight-run', 'assets/sprites/knight/run.png', 'assets/sprites/knight/run.json');
+        game.load.audio('knight-sword', 'assets/audio/knight/sword.wav');
+
     }
 
     constructor(game: Phaser.Game, x: number, y: number) {
@@ -49,7 +53,7 @@ class Knight extends Phaser.Sprite {
 
         this.anchor.x = 0.5;
 
-        this.body.setSize(this.width, this.height - 4, 0, 0);
+        this.body.setSize(this.width - 15, this.height - 15, 5, 7);
         this.body.velocity.x = 0;
         this.body.velocity.y = 0;
         this.body.bounce.y = 0;
@@ -58,12 +62,17 @@ class Knight extends Phaser.Sprite {
         this.scale.x = SCALE;
         this.scale.y = SCALE;
 
+        this.attackSound = game.add.audio('knight-sword');
+
+        this.attack = _.throttle(this.attack, 150);
+
         this.setAnimation('idle');
     }
 
     attack(): boolean {
         if (!this.isJumping()) {
             this.setAnimation('attack', true);
+            this.attackSound.play();
             this.body.acceleration.x = 0;
             this.body.velocity.x = Math.round(this.body.velocity.x / 2);
             return true;
@@ -166,7 +175,7 @@ class Knight extends Phaser.Sprite {
         return currentAnim.name === animation && currentAnim.isPlaying;
     }
 
-    private setAnimation(name: string, restart=false): void {
+    private setAnimation(name: string, restart = false): void {
         if (this.currentMove !== name) {
             this.loadTexture('knight-' + name, 0);
             this.animations.play(name);

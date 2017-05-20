@@ -81,6 +81,7 @@ class Teravia {
 
         this.game.physics.arcade.collide(this.player, this.level.ground);
         this.game.physics.arcade.collide(this.enemies, this.level.ground);
+        this.game.physics.arcade.collide(this.enemies, this.enemies);
         this.enemies.forEach(enemy => enemy.alive && this.game.physics.arcade.collide(self.player, enemy), this);
 
         let move = false;
@@ -107,12 +108,12 @@ class Teravia {
         }
     }
 
-    // render(game) {
-    // game.debug.bodyInfo(this.cat.sprite, 32, 32);
-    //
-    // game.debug.body(this.layer);
-    // game.debug.body(this.cats[0].sprite);
-    // }
+    render(game) {
+        // game.debug.bodyInfo(this.cat.sprite, 32, 32);
+        //
+        // game.debug.body(this.player);
+        // game.debug.body(this.enemies.getAt(0));
+    }
 }
 
 window.onload = () => new Teravia();

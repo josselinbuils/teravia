@@ -8,6 +8,26 @@ const HEIGHT = 768;
 class Level1 {
     ground: Phaser.TilemapLayer;
 
+    static loadAssets(game: Phaser.Game) {
+        game.load.audio('music', 'assets/audio/come_and_Find_Me.mp3');
+        game.load.image('background', 'assets/images/BG_resize.png');
+        game.load.image('tileset', 'assets/images/tiles/tileset.png');
+        game.load.image('Bone (1)', 'assets/images/tiles/Bone (1).png');
+        game.load.image('Bone (2)', 'assets/images/tiles/Bone (2).png');
+        game.load.image('Bone (3)', 'assets/images/tiles/Bone (3).png');
+        game.load.image('Bone (4)', 'assets/images/tiles/Bone (4).png');
+        game.load.image('ArrowSign', 'assets/images/objects/ArrowSign.png');
+        game.load.image('Bush (1)', 'assets/images/objects/Bush (1).png');
+        game.load.image('Bush (2)', 'assets/images/objects/Bush (2).png');
+        game.load.image('Crate', 'assets/images/objects/Crate.png');
+        game.load.image('DeadBush', 'assets/images/objects/DeadBush.png');
+        game.load.image('Skeleton', 'assets/images/objects/Skeleton.png');
+        game.load.image('TombStone (1)', 'assets/images/objects/TombStone (1).png');
+        game.load.image('TombStone (2)', 'assets/images/objects/TombStone (2).png');
+        game.load.image('Tree', 'assets/images/objects/Tree.png');
+        game.load.tilemap('map', 'assets/tilemaps/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
+    }
+
     constructor(game: Phaser.Game) {
 
         let music = game.add.audio('music');
@@ -45,30 +65,13 @@ class Level1 {
         this.ground = map.createLayer('ground');
         this.ground.resizeWorld();
 
+        game.physics.arcade.enable(this.ground);
+        this.ground.body.friction.x = 1;
+
         map.setCollisionBetween(1, 16, true, 'ground');
 
         let deco = map.createLayer('deco');
         deco.alpha = 0.5;
-    }
-
-    static loadAssets(game: Phaser.Game) {
-        game.load.audio('music', 'assets/audio/come_and_Find_Me.mp3');
-        game.load.tilemap('map', 'assets/tilemaps/tilemap.json', null, Phaser.Tilemap.TILED_JSON);
-        game.load.image('background', 'assets/images/BG_resize.png');
-        game.load.image('tileset', 'assets/images/tiles/tileset.png');
-        game.load.image('Bone (1)', 'assets/images/tiles/Bone (1).png');
-        game.load.image('Bone (2)', 'assets/images/tiles/Bone (2).png');
-        game.load.image('Bone (3)', 'assets/images/tiles/Bone (3).png');
-        game.load.image('Bone (4)', 'assets/images/tiles/Bone (4).png');
-        game.load.image('ArrowSign', 'assets/images/objects/ArrowSign.png');
-        game.load.image('Bush (1)', 'assets/images/objects/Bush (1).png');
-        game.load.image('Bush (2)', 'assets/images/objects/Bush (2).png');
-        game.load.image('Crate', 'assets/images/objects/Crate.png');
-        game.load.image('DeadBush', 'assets/images/objects/DeadBush.png');
-        game.load.image('Skeleton', 'assets/images/objects/Skeleton.png');
-        game.load.image('TombStone (1)', 'assets/images/objects/TombStone (1).png');
-        game.load.image('TombStone (2)', 'assets/images/objects/TombStone (2).png');
-        game.load.image('Tree', 'assets/images/objects/Tree.png');
     }
 }
 

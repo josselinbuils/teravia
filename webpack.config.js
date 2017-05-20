@@ -25,6 +25,7 @@ module.exports = {
             inject: 'body',
         }),
         new webpack.NoEmitOnErrorsPlugin(),
+        new webpack.ProvidePlugin({_: 'underscore'})
     ],
     module: {
         loaders: [
