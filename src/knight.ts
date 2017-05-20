@@ -10,19 +10,22 @@ const VELOCITY_Y = 800;
 
 class Knight extends Phaser.Sprite {
 
-    private attackSound: Phaser.Sound;
     private canDoubleJump: boolean;
     private currentMove: string;
     private jumpKeyPushed: boolean;
     private jumpTime: number;
+    private sounds: {
+        attack: Phaser.Sound,
+        jump: Phaser.Sound
+    };
 
     static loadAssets(game: Phaser.Game) {
         game.load.atlasJSONHash('knight-attack', 'assets/sprites/knight/attack.png', 'assets/sprites/knight/attack.json');
         game.load.atlasJSONHash('knight-idle', 'assets/sprites/knight/idle.png', 'assets/sprites/knight/idle.json');
         game.load.atlasJSONHash('knight-jump', 'assets/sprites/knight/jump.png', 'assets/sprites/knight/jump.json');
         game.load.atlasJSONHash('knight-run', 'assets/sprites/knight/run.png', 'assets/sprites/knight/run.json');
-        game.load.audio('knight-sword', 'assets/audio/knight/sword.wav');
-
+        game.load.audio('knight-attack', 'assets/audio/knight/attack.wav');
+        game.load.audio('knight-jump', 'assets/audio/knight/jump.m4a');
     }
 
     constructor(game: Phaser.Game, x: number, y: number) {
@@ -62,7 +65,12 @@ class Knight extends Phaser.Sprite {
         this.scale.x = SCALE;
         this.scale.y = SCALE;
 
-        this.attackSound = game.add.audio('knight-sword');
+        this.sounds = {
+            attack: game.add.audio('knight-attack'),
+            jump: game.add.audio('knight-jump')
+        };
+
+        this.sounds.jump.volume = 0.3;
 
         this.attack = _.throttle(this.attack, 200);
 
@@ -72,7 +80,7 @@ class Knight extends Phaser.Sprite {
     attack(): boolean {
         if (!this.isJumping()) {
             this.setAnimation('attack', true);
-            this.attackSound.play();
+            this.sounds.attack.play();
             this.body.acceleration.x = 0;
             this.body.velocity.x = Math.round(this.body.velocity.x / 2);
             return true;
@@ -107,15 +115,17 @@ class Knight extends Phaser.Sprite {
         }
 
         if (!this.jumpKeyPushed) {
-            this.setAnimation('jump', true);
-
             if (!this.isJumping()) {
                 this.body.velocity.y = -VELOCITY_Y;
                 this.canDoubleJump = true;
                 this.jumpTime = this.game.time.now;
+                this.setAnimation('jump', true);
+                this.sounds.jump.play();
             } else if (this.canDoubleJump && (this.game.time.now - this.jumpTime) < 500) {
                 this.body.velocity.y = -Math.round(1.5 * VELOCITY_Y);
                 this.canDoubleJump = false;
+                this.setAnimation('jump', true);
+                this.sounds.jump.play();
             }
         }
 

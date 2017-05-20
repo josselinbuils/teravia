@@ -17,7 +17,7 @@ module.exports = {
     },
     plugins: [
         new CopyWebpackPlugin([{
-            from: './src/assets/dist',
+            from: './src/assets/game',
             to: './assets'
         }]),
         new HtmlWebpackPlugin({

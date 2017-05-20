@@ -1,0 +1,40 @@
+{
+"frames": {
+	"blood_b_0001.png": {
+		"frame": {"x":0, "y":206, "w":102, "h":102},
+		"spriteSourceSize": {"x":0,"y":0,"w":102,"h":102},
+		"sourceSize": {"w":102,"h":102}
+	},
+	"blood_b_0002.png": {
+		"frame": {"x":103, "y":103, "w":102, "h":102},
+		"spriteSourceSize": {"x":0,"y":0,"w":102,"h":102},
+		"sourceSize": {"w":102,"h":102}
+	},
+	"blood_b_0003.png": {
+		"frame": {"x":103, "y":0, "w":102, "h":102},
+		"spriteSourceSize": {"x":0,"y":0,"w":102,"h":102},
+		"sourceSize": {"w":102,"h":102}
+	},
+	"blood_b_0004.png": {
+		"frame": {"x":103, "y":206, "w":102, "h":102},
+		"spriteSourceSize": {"x":0,"y":0,"w":102,"h":102},
+		"sourceSize": {"w":102,"h":102}
+	},
+	"blood_b_0005.png": {
+		"frame": {"x":0, "y":103, "w":102, "h":102},
+		"spriteSourceSize": {"x":0,"y":0,"w":102,"h":102},
+		"sourceSize": {"w":102,"h":102}
+	},
+	"blood_b_0006.png": {
+		"frame": {"x":0, "y":0, "w":102, "h":102},
+		"spriteSourceSize": {"x":0,"y":0,"w":102,"h":102},
+		"sourceSize": {"w":102,"h":102}
+	}
+
+},
+"meta": {
+	"image": "sprites.png",
+	"size": {"w": 206, "h": 309},
+	"scale": "1"
+}
+}

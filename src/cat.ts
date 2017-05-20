@@ -19,6 +19,7 @@ class Cat extends Phaser.Sprite {
         die: Phaser.Sound,
         meow: Phaser.Sound
     };
+    private visibleTimeout: number;
     private xMin: number;
     private xMax: number;
 
@@ -120,8 +121,6 @@ class Cat extends Phaser.Sprite {
             return;
         }
 
-        let distance = this.game.physics.arcade.distanceBetween(this.player, this);
-
         if (!this.playerDetected) {
             let sens = this.scale.x / SCALE_CAT;
 
@@ -132,28 +131,35 @@ class Cat extends Phaser.Sprite {
                 this.scale.set(-SCALE_CAT, SCALE_CAT);
                 this.body.velocity.x = -VELOCITY;
             }
-        } else if (distance > 100) {
+        } else if (Math.abs(this.x - this.player.x) > 50) {
             let sens = this.player.x < this.x ? -1 : 1;
             this.scale.set(sens * SCALE_CAT, SCALE_CAT);
             this.body.velocity.x = sens * VELOCITY * 2;
         }
 
-        let isVisible = Math.abs(this.player.y - this.y) <= 200;
+        if (this.isPlayerVisible()) {
+            this.body.velocity.x = this.scale.x / SCALE_CAT * VELOCITY * 2;
 
-        if (isVisible && distance < 500) {
-            if (this.isPlayerVisible()) {
-                this.body.velocity.x = this.scale.x / SCALE_CAT * VELOCITY * 2;
-
-                if (!this.playerDetected) {
-                    this.setAnimation('run');
-                    this.sounds.meow.play();
-                    this.playerDetected = true;
-                }
+            if (!this.playerDetected) {
+                this.setAnimation('run');
+                this.sounds.meow.play();
+                this.playerDetected = true;
             }
-        } else {
-            this.body.velocity.x = this.scale.x / SCALE_CAT * VELOCITY;
-            this.setAnimation('walk');
-            this.playerDetected = false;
+
+            if (this.visibleTimeout) {
+                clearTimeout(this.visibleTimeout);
+                this.visibleTimeout = null;
+            }
+
+        } else if (this.playerDetected) {
+            if (!this.visibleTimeout) {
+                this.visibleTimeout = setTimeout(() => {
+                    this.body.velocity.x = this.scale.x / SCALE_CAT * VELOCITY;
+                    this.setAnimation('walk');
+                    this.playerDetected = false;
+                    this.visibleTimeout = null;
+                }, 3000, this);
+            }
         }
 
         if (this.healthBar) {
@@ -166,7 +172,9 @@ class Cat extends Phaser.Sprite {
     }
 
     private isPlayerVisible(): boolean {
-        return (this.player.x < this.x && this.scale.x < 0) || (this.player.x > this.x && this.scale.x > 0);
+        return ((this.player.x < this.x && this.scale.x < 0) || (this.player.x > this.x && this.scale.x > 0)) &&
+            Math.abs(this.player.y - this.y) <= 200 &&
+            Math.abs(this.x - this.player.x) < 500;
     }
 
     private showBlood(): void {
