@@ -8,6 +8,7 @@ import {Level1} from './level1';
 
 const WIDTH = 1365;
 const HEIGHT = 768;
+const TILE_BIAS = 32;
 
 class Teravia {
     private cursors: Phaser.CursorKeys;
@@ -20,31 +21,36 @@ class Teravia {
         this.game = new Phaser.Game(WIDTH, HEIGHT, Phaser.AUTO, 'content', this);
     }
 
-    preload(game): void {
+    preload(game: Phaser.Game): void {
         // game.time.advancedTiming = true;
         Cat.loadAssets(game);
         Level1.loadAssets(game);
         Knight.loadAssets(game);
     }
 
-    create(game): void {
+    create(game: Phaser.Game): void {
         game.physics.startSystem(Phaser.Physics.ARCADE);
-        game.physics.arcade.TILE_BIAS = 32;
+
+        Teravia.setTileBias(game);
 
         this.cursors = game.input.keyboard.createCursorKeys();
 
         this.level = new Level1(game);
-        this.player = new Knight(game, 30, HEIGHT / 2);
 
         this.enemies = game.add.group();
 
         for (let i = 0; i < 4; i++) {
-            let enemy = new Cat(game, this.player, 400 + (i * 750), HEIGHT - 205, i % 2 === 0 ? 1 : -1);
-            this.enemies.add(enemy);
-            enemy.events.onDestroy.add(() => this.enemies.remove(enemy), this);
+            this.enemies.add(new Cat(this.game, 400 + (i * 750), HEIGHT - 205, i % 2 === 0 ? 1 : -1));
         }
 
-        this.game.camera.follow(this.player);
+        this.enemies.add(new Cat(this.game, 415, HEIGHT - 480, 1));
+        this.enemies.add(new Cat(this.game, 4680, HEIGHT - 205, 1));
+
+        // Must be added after enemies
+        this.player = new Knight(game, 30, HEIGHT / 2);
+        Cat.setPlayer(this.player);
+
+        game.camera.follow(this.player);
 
         game.physics.arcade.gravity.y = 3000;
 
@@ -72,16 +78,17 @@ class Teravia {
         }, this);
     }
 
-    update(): void {
+    update(game: Phaser.Game): void {
         let self = this,
             cursors = this.cursors,
             player = this.player;
 
         // game.debug.text(game.time.fps || '--', 2, 14, '#00ff00');
 
-        this.game.physics.arcade.collide(this.player, this.level.ground);
-        this.game.physics.arcade.collide(this.enemies, this.level.ground);
-        this.game.physics.arcade.collide(this.enemies, this.enemies);
+        game.physics.arcade.collide(this.player, this.level.ground);
+        game.physics.arcade.collide(this.enemies, this.level.ground);
+        game.physics.arcade.collide(this.enemies, this.enemies);
+
         this.enemies.forEach(enemy => enemy.alive && this.game.physics.arcade.collide(self.player, enemy), this);
 
         let move = false;
@@ -108,11 +115,15 @@ class Teravia {
         }
     }
 
-    render(game) {
-        // game.debug.bodyInfo(this.cat.sprite, 32, 32);
-        //
+    render(game: Phaser.Game): void {
+        // game.debug.bodyInfo(this.player, 32, 32);
         // game.debug.body(this.player);
         // game.debug.body(this.enemies.getAt(0));
+    }
+
+    // game has type any because TILE_BIAS is not known as property
+    private static setTileBias(game: any): void {
+        game.physics.arcade.TILE_BIAS = TILE_BIAS;
     }
 }
 

@@ -9,11 +9,11 @@ const VELOCITY = 100;
 
 class Cat extends Phaser.Sprite {
 
+    private static player: Phaser.Sprite;
     private blood: Phaser.Sprite;
     private currentMove: string;
     private healthBar: HealthBar;
     private life: number;
-    private player: Phaser.Sprite;
     private playerDetected: boolean;
     private sounds: {
         die: Phaser.Sound,
@@ -32,13 +32,12 @@ class Cat extends Phaser.Sprite {
         game.load.audio('cat-meow', 'assets/audio/cat/meow.m4a');
     }
 
-    constructor(game: Phaser.Game, player: Phaser.Sprite, xMin: number, y: number, sens: number) {
+    constructor(game: Phaser.Game, xMin: number, y: number, sens: number) {
         let xMax = xMin + 400;
 
         super(game, sens > 0 ? xMin : xMax, y, 'cat-walk');
         game.add.existing(this);
 
-        this.player = player;
         this.xMin = xMin;
         this.xMax = xMax;
 
@@ -59,7 +58,7 @@ class Cat extends Phaser.Sprite {
 
         let deadAnim = this.animations.add('dead', null, 10);
         deadAnim.onComplete.add(() => {
-            this.destroy();
+            this.body = null;
             this.blood.destroy();
         }, this);
 
@@ -83,6 +82,10 @@ class Cat extends Phaser.Sprite {
 
         this.life = 100;
         this.alive = true;
+    }
+
+    static setPlayer(player: Phaser.Sprite) {
+        this.player = player;
     }
 
     hurt(): void {
@@ -131,8 +134,8 @@ class Cat extends Phaser.Sprite {
                 this.scale.set(-SCALE_CAT, SCALE_CAT);
                 this.body.velocity.x = -VELOCITY;
             }
-        } else if (Math.abs(this.x - this.player.x) > 50) {
-            let sens = this.player.x < this.x ? -1 : 1;
+        } else if (Math.abs(this.x - Cat.player.x) > 50) {
+            let sens = Cat.player.x < this.x ? -1 : 1;
             this.scale.set(sens * SCALE_CAT, SCALE_CAT);
             this.body.velocity.x = sens * VELOCITY * 2;
         }
@@ -172,9 +175,9 @@ class Cat extends Phaser.Sprite {
     }
 
     private isPlayerVisible(): boolean {
-        return ((this.player.x < this.x && this.scale.x < 0) || (this.player.x > this.x && this.scale.x > 0)) &&
-            Math.abs(this.player.y - this.y) <= 200 &&
-            Math.abs(this.x - this.player.x) < 500;
+        return ((Cat.player.x < this.x && this.scale.x < 0) || (Cat.player.x > this.x && this.scale.x > 0)) &&
+            Math.abs(Cat.player.y - this.y) <= 200 &&
+            Math.abs(this.x - Cat.player.x) < 500;
     }
 
     private showBlood(): void {
