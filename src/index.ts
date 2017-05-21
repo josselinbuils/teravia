@@ -5,7 +5,8 @@ import * as Phaser from 'phaser';
 import {Cat} from './cat';
 import {Knight} from './knight';
 import {Level1} from './level1';
-import {Player} from "./player";
+import {Player} from './player';
+import {Enemy} from './enemy';
 
 const WIDTH = 1365;
 const HEIGHT = 768;
@@ -32,7 +33,8 @@ class Teravia {
     create(game: Phaser.Game): void {
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
-        Teravia.setTileBias(game);
+        // TILE_BIAS is an unknown property
+        (<any> game.physics.arcade).TILE_BIAS = TILE_BIAS;
 
         this.cursors = game.input.keyboard.createCursorKeys();
 
@@ -41,11 +43,11 @@ class Teravia {
         this.enemies = game.add.group();
 
         for (let i = 0; i < 4; i++) {
-            this.enemies.add(new Cat(this.game, 400 + (i * 750), HEIGHT - 205, i % 2 === 0 ? 1 : -1));
+            this.enemies.add(<Enemy> new Cat(this.game, 400 + (i * 750), HEIGHT - 205, i % 2 === 0 ? 1 : -1));
         }
 
-        this.enemies.add(new Cat(this.game, 415, HEIGHT - 480, 1));
-        this.enemies.add(new Cat(this.game, 4680, HEIGHT - 205, 1));
+        this.enemies.add(<Enemy> new Cat(this.game, 415, HEIGHT - 480, 1));
+        this.enemies.add(<Enemy> new Cat(this.game, 4680, HEIGHT - 205, 1));
 
         // Must be added after enemies
         this.player = new Knight(game, 30, HEIGHT / 2);
@@ -88,7 +90,6 @@ class Teravia {
 
         game.physics.arcade.collide(this.player, this.level.ground);
         game.physics.arcade.collide(this.enemies, this.level.ground);
-        game.physics.arcade.collide(this.enemies, this.enemies);
 
         this.enemies.forEach(enemy => enemy.alive && this.game.physics.arcade.collide(self.player, enemy), this);
 
@@ -120,11 +121,6 @@ class Teravia {
         // game.debug.bodyInfo(this.player, 32, 32);
         // game.debug.body(this.player);
         // game.debug.body(this.enemies.getAt(0));
-    }
-
-    // game has type any because TILE_BIAS is not known as property
-    private static setTileBias(game: any): void {
-        game.physics.arcade.TILE_BIAS = TILE_BIAS;
     }
 }
 
