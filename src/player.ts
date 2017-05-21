@@ -5,6 +5,7 @@ import * as _ from 'underscore';
 import {HealthBar} from './healthbar';
 
 const ACC_X = 10000;
+const DEFAULT_ANIMATION_FRAMERATE = 10;
 const VELOCITY_X = 700;
 const VELOCITY_Y = 800;
 
@@ -21,16 +22,18 @@ class Player extends Phaser.Sprite {
     private jumpKeyPushed: boolean;
     private jumpTime: number;
     private life: number;
+    private texturePrefix: string;
 
     static loadAssets(game: Phaser.Game) {
         game.load.audio('player-jump', 'assets/audio/player/jump.m4a');
     }
 
-    constructor(game: Phaser.Game, x: number, y: number, sprite: string) {
+    constructor(game: Phaser.Game, x: number, y: number, texturePrefix: string) {
 
-        super(game, x, y, sprite);
+        super(game, x, y, texturePrefix + '-idle');
         game.add.existing(this);
 
+        this.texturePrefix = texturePrefix;
         this.jumpKeyPushed = false;
 
         game.physics.arcade.enable(this);
@@ -61,6 +64,10 @@ class Player extends Phaser.Sprite {
 
         this.attack = _.throttle(this.attack, 200);
         this.hurt = _.throttle(this.hurt, 500);
+
+        this.animations.add('idle', null, DEFAULT_ANIMATION_FRAMERATE, true);
+        this.animations.add('jump', null, DEFAULT_ANIMATION_FRAMERATE);
+        this.animations.add('run', null, DEFAULT_ANIMATION_FRAMERATE, true);
 
         this.setAnimation('idle');
     }
@@ -173,7 +180,7 @@ class Player extends Phaser.Sprite {
 
     setAnimation(name: string, restart = false): void {
         if (this.currentMove !== name) {
-            this.loadTexture('knight-' + name, 0);
+            this.loadTexture(this.texturePrefix + '-' + name, 0);
             this.animations.play(name);
             this.currentMove = name;
         } else if (restart) {
