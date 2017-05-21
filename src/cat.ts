@@ -2,6 +2,7 @@ import 'pixi';
 import 'p2';
 import * as Phaser from 'phaser';
 import {HealthBar} from './healthbar';
+import {Player} from "./player";
 
 const SCALE_BLOOD = 1;
 const SCALE_CAT = 1;
@@ -9,7 +10,8 @@ const VELOCITY = 100;
 
 class Cat extends Phaser.Sprite {
 
-    private static player: Phaser.Sprite;
+    private static player: Player;
+
     private blood: Phaser.Sprite;
     private currentMove: string;
     private healthBar: HealthBar;
@@ -84,8 +86,8 @@ class Cat extends Phaser.Sprite {
         this.alive = true;
     }
 
-    static setPlayer(player: Phaser.Sprite) {
-        this.player = player;
+    static setPlayer(player: Player) {
+        Cat.player = player;
     }
 
     hurt(): void {
@@ -134,10 +136,12 @@ class Cat extends Phaser.Sprite {
                 this.scale.set(-SCALE_CAT, SCALE_CAT);
                 this.body.velocity.x = -VELOCITY;
             }
-        } else if (Math.abs(this.x - Cat.player.x) > 50) {
+        } else if (Math.abs(this.x - Cat.player.x) > 100) {
             let sens = Cat.player.x < this.x ? -1 : 1;
             this.scale.set(sens * SCALE_CAT, SCALE_CAT);
             this.body.velocity.x = sens * VELOCITY * 2;
+        } else if (this.isPlayerVisible()) {
+            Cat.player.hurt();
         }
 
         if (this.isPlayerVisible()) {
