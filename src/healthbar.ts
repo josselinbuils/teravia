@@ -4,7 +4,6 @@ class HealthBar {
     private barSprite: Phaser.Sprite;
     private bgSprite: Phaser.Sprite;
     private config: any;
-    private flipped: boolean;
     private game: Phaser.Game;
     private x: number;
     private y: number;
@@ -16,7 +15,6 @@ class HealthBar {
         this.setPosition(this.config.x, this.config.y);
         this.drawBackground();
         this.drawHealthBar();
-        this.setFixedToCamera(this.config.isFixedToCamera);
         this.setPercent(100);
     }
 
@@ -38,6 +36,7 @@ class HealthBar {
         this.drawHealthBar();
         this.barSprite.width = width;
         this.setWidth(newValue * this.config.width);
+        this.setFixedToCamera(this.config.fixedToCamera);
     };
 
     setPosition(x: number, y: number) {
@@ -62,10 +61,6 @@ class HealthBar {
 
         this.bgSprite = this.game.add.sprite(this.x, this.y, bmd);
         this.bgSprite.anchor.set(0.5);
-
-        if (this.flipped) {
-            this.bgSprite.scale.x = -1;
-        }
     }
 
     private drawHealthBar() {
@@ -77,10 +72,6 @@ class HealthBar {
 
         this.barSprite = this.game.add.sprite(this.x - this.bgSprite.width / 2, this.y, bmd);
         this.barSprite.anchor.y = 0.5;
-
-        if (this.flipped) {
-            this.barSprite.scale.x = -1;
-        }
     }
 
     private static getColor(value: number) {
@@ -112,8 +103,7 @@ class HealthBar {
                 color: '#FEFF03'
             },
             animationDuration: 200,
-            flipped: false,
-            isFixedToCamera: false
+            fixedToCamera: false
         };
 
         return this.mergeObjetcs(defaultConfig, newConfig);
@@ -121,13 +111,9 @@ class HealthBar {
 
     private setupConfiguration(providedConfig: object) {
         this.config = this.mergeWithDefaultConfiguration(providedConfig);
-        this.flipped = this.config.flipped;
     }
 
     private setWidth(newWidth: number) {
-        if (this.flipped) {
-            newWidth = -1 * newWidth;
-        }
         this.game.add.tween(this.barSprite).to({width: newWidth}, this.config.animationDuration, Phaser.Easing.Linear.None, true);
     }
 }

@@ -3,6 +3,7 @@ import 'p2';
 import * as Phaser from 'phaser';
 
 import {Cat} from './cat';
+import {HealthBar} from './healthbar';
 import {Knight} from './knight';
 import {Level1} from './level1';
 
@@ -14,8 +15,9 @@ class Teravia {
     private cursors: Phaser.CursorKeys;
     private enemies: Phaser.Group;
     private game: Phaser.Game;
-    private player: Knight;
+    private healthBar: HealthBar;
     private level: Level1;
+    private player: Knight;
 
     constructor() {
         this.game = new Phaser.Game(WIDTH, HEIGHT, Phaser.AUTO, 'content', this);
@@ -36,6 +38,14 @@ class Teravia {
         this.cursors = game.input.keyboard.createCursorKeys();
 
         this.level = new Level1(game);
+
+        this.healthBar = new HealthBar(game, {
+            x: 95,
+            y: 25,
+            width: 150,
+            height: 15,
+            fixedToCamera: true
+        });
 
         this.enemies = game.add.group();
 
