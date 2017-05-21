@@ -16,16 +16,13 @@ class HealthBar {
         this.drawBackground();
         this.drawHealthBar();
         this.setPercent(100);
+        this.bgSprite.fixedToCamera = this.config.fixedToCamera;
+        this.barSprite.fixedToCamera = this.config.fixedToCamera;
     }
 
     destroy() {
         this.bgSprite.destroy();
         this.barSprite.destroy();
-    }
-
-    setFixedToCamera(fixedToCamera: boolean) {
-        this.bgSprite.fixedToCamera = fixedToCamera;
-        this.barSprite.fixedToCamera = fixedToCamera;
     }
 
     setPercent(newValue: number) {
@@ -36,7 +33,7 @@ class HealthBar {
         this.drawHealthBar();
         this.barSprite.width = width;
         this.setWidth(newValue * this.config.width);
-        this.setFixedToCamera(this.config.fixedToCamera);
+        this.barSprite.fixedToCamera = this.config.fixedToCamera;
     };
 
     setPosition(x: number, y: number) {
