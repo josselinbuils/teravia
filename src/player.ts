@@ -65,6 +65,9 @@ class Player extends Phaser.Sprite {
         this.attack = _.throttle(this.attack, 200);
         this.hurt = _.throttle(this.hurt, 500);
 
+        let deadAnim = this.animations.add('dead', null, DEFAULT_ANIMATION_FRAMERATE);
+        deadAnim.onComplete.add(() => this.body = null, this);
+
         this.animations.add('idle', null, DEFAULT_ANIMATION_FRAMERATE, true);
         this.animations.add('jump', null, DEFAULT_ANIMATION_FRAMERATE);
         this.animations.add('run', null, DEFAULT_ANIMATION_FRAMERATE, true);
@@ -91,12 +94,17 @@ class Player extends Phaser.Sprite {
     hurt(): void {
         this.life -= 5;
         this.healthBar.setPercent(this.life);
-        this.tint = 0xFF0000;
-        setTimeout(() => this.tint = 0xFFFFFF, 100, this);
+
+        if (this.life <= 0) {
+            this.kill();
+        } else {
+            this.tint = 0xFF0000;
+            setTimeout(() => this.tint = 0xFFFFFF, 100, this);
+        }
     }
 
     idle(): void {
-        if (!this.isBusy()) {
+        if (!this.isJumping() && !this.isAttacking()) {
             this.setAnimation('idle');
             this.body.velocity.x = 0;
         }
@@ -113,7 +121,7 @@ class Player extends Phaser.Sprite {
 
     jump(): void {
 
-        if (this.isAttacking()) {
+        if (this.isAttacking() || !this.alive) {
             return;
         }
 
@@ -133,6 +141,14 @@ class Player extends Phaser.Sprite {
         }
 
         this.jumpKeyPushed = true;
+    }
+
+    kill(): Phaser.Sprite {
+        this.alive = false;
+        this.setAnimation('dead');
+        // this.sounds.die.play();
+        this.body.velocity.x = 0;
+        return this;
     }
 
     moveLeft(): void {
@@ -188,10 +204,6 @@ class Player extends Phaser.Sprite {
             this.animations.stop();
             this.animations.play(name);
         }
-    }
-
-    private isBusy(): boolean {
-        return this.isJumping() || this.isAttacking();
     }
 
     private isPlaying(animation): boolean {

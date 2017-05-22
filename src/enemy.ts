@@ -54,7 +54,9 @@ class Enemy extends Phaser.Sprite {
             playerDetected: null
         };
 
-        this.animations.add('dead', null, DEFAULT_ANIMATION_FRAMERATE);
+        let deadAnim = this.animations.add('dead', null, DEFAULT_ANIMATION_FRAMERATE);
+        deadAnim.onComplete.add(() => this.body = null, this);
+
         this.animations.add('run', null, DEFAULT_ANIMATION_FRAMERATE, true);
         this.animations.add('walk', null, DEFAULT_ANIMATION_FRAMERATE, true);
 
@@ -128,7 +130,7 @@ class Enemy extends Phaser.Sprite {
             }
         }
 
-        if (this.isPlayerVisible()) {
+        if (this.isPlayerVisible() && Enemy.player.alive) {
 
             if (!this.playerDetected) {
                 this.body.velocity.x = this.scale.x * VELOCITY * 2;

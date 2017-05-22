@@ -8,6 +8,7 @@ class Knight extends Player {
     static loadAssets(game: Phaser.Game) {
         Player.loadAssets(game);
         game.load.atlasJSONHash('knight-attack', 'assets/sprites/knight/attack.png', 'assets/sprites/knight/attack.json');
+        game.load.atlasJSONHash('knight-dead', 'assets/sprites/knight/dead.png', 'assets/sprites/knight/dead.json');
         game.load.atlasJSONHash('knight-idle', 'assets/sprites/knight/idle.png', 'assets/sprites/knight/idle.json');
         game.load.atlasJSONHash('knight-jump', 'assets/sprites/knight/jump.png', 'assets/sprites/knight/jump.json');
         game.load.atlasJSONHash('knight-run', 'assets/sprites/knight/run.png', 'assets/sprites/knight/run.json');
@@ -31,6 +32,7 @@ class Knight extends Player {
             }
         }, this);
 
+        this.animations.getAnimation('dead').speed = 10;
         this.animations.getAnimation('idle').speed = 10;
         this.animations.getAnimation('jump').speed = 20;
         this.animations.getAnimation('run').speed = 30;

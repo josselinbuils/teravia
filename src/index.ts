@@ -78,8 +78,7 @@ class Teravia {
     }
 
     update(game: Phaser.Game): void {
-        let self = this,
-            cursors = this.cursors,
+        let cursors = this.cursors,
             player = this.player;
 
         // game.debug.text(game.time.fps || '--', 2, 14, '#00ff00');
@@ -87,29 +86,31 @@ class Teravia {
         game.physics.arcade.collide(this.player, this.level.ground);
         game.physics.arcade.collide(this.enemies, this.level.ground);
 
-        this.enemies.forEach(enemy => enemy.alive && this.game.physics.arcade.collide(self.player, enemy), this);
+        if (this.player.alive) {
+            this.enemies.forEach(enemy => enemy.alive && this.game.physics.arcade.collide(this.player, enemy), this);
 
-        let move = false;
+            let move = false;
 
-        if (cursors.left.isDown) {
-            player.moveLeft();
-            move = true;
-        }
+            if (cursors.left.isDown) {
+                player.moveLeft();
+                move = true;
+            }
 
-        if (cursors.right.isDown) {
-            player.moveRight();
-            move = true;
-        }
+            if (cursors.right.isDown) {
+                player.moveRight();
+                move = true;
+            }
 
-        if (cursors.up.isDown) {
-            player.jump();
-            move = true;
-        } else {
-            player.releaseJumpKey();
-        }
+            if (cursors.up.isDown) {
+                player.jump();
+                move = true;
+            } else {
+                player.releaseJumpKey();
+            }
 
-        if (!move) {
-            player.idle();
+            if (!move) {
+                player.idle();
+            }
         }
     }
 

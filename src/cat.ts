@@ -25,16 +25,11 @@ class Cat extends Enemy {
         this.blood.visible = false;
 
         let bloodAnim = this.blood.animations.add('cat-blood', null, 10);
-        bloodAnim.onComplete.add(() => {
-            this.blood.visible = false;
-        }, this);
+        bloodAnim.onComplete.add(() => this.blood.visible = false, this);
 
         let deadAnim = this.animations.getAnimation('run');
         deadAnim.speed = 10;
-        deadAnim.onComplete.add(() => {
-            this.body = null;
-            this.blood.destroy();
-        }, this);
+        deadAnim.onComplete.add(() => this.blood.destroy(), this);
 
         this.animations.getAnimation('run').speed = 25;
         this.animations.getAnimation('walk').speed = 15;
