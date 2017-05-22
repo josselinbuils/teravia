@@ -67,14 +67,10 @@ class Teravia {
 
         let spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         spaceKey.onDown.add(() => {
-            if (this.player.attack() && !this.player.isJumping()) {
+            if (this.player.attack()) {
                 this.enemies.forEach(function (enemy) {
                     if (enemy.alive && this.player.canHurt(enemy)) {
-                        let distance = this.game.physics.arcade.distanceBetween(this.player, enemy);
-
-                        if (distance < 80) {
-                            enemy.hurt();
-                        }
+                        enemy.hurt();
                     }
                 }, this);
             }

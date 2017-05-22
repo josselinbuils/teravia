@@ -5,6 +5,7 @@ import {HealthBar} from './healthbar';
 import {Player} from "./player";
 
 const DEFAULT_ANIMATION_FRAMERATE = 10;
+const INVINCIBLE_DURATION = 2000;
 const VELOCITY = 100;
 
 class Enemy extends Phaser.Sprite {
@@ -78,9 +79,14 @@ class Enemy extends Phaser.Sprite {
 
         if (this.life === 0) {
             this.kill();
-        } else if (!this.isPlayerVisible()) {
-            this.body.velocity.x *= -1;
-            this.scale.x *= -1;
+        } else {
+
+            if (!this.isPlayerVisible()) {
+                this.body.velocity.x *= -1;
+                this.scale.x *= -1;
+            }
+
+            this.x += -this.scale.x * 30;
         }
     }
 
@@ -114,14 +120,18 @@ class Enemy extends Phaser.Sprite {
             let sens = Enemy.player.x < this.x ? -1 : 1;
             this.scale.x = sens;
             this.body.velocity.x = sens * VELOCITY * 2;
-        } else if (this.isPlayerVisible()) {
-            Enemy.player.hurt();
+        } else {
+            this.body.velocity.x = Math.round(this.scale.x * VELOCITY);
+
+            if (this.canHurtPlayer()) {
+                Enemy.player.hurt();
+            }
         }
 
         if (this.isPlayerVisible()) {
-            this.body.velocity.x = this.scale.x * VELOCITY * 2;
 
             if (!this.playerDetected) {
+                this.body.velocity.x = this.scale.x * VELOCITY * 2;
                 this.setAnimation('run');
                 this.sounds.playerDetected.play();
                 this.playerDetected = true;
@@ -139,13 +149,22 @@ class Enemy extends Phaser.Sprite {
                     this.setAnimation('walk');
                     this.playerDetected = false;
                     this.visibleTimeout = null;
-                }, 2000, this);
+                }, INVINCIBLE_DURATION, this);
             }
         }
 
         if (this.healthBar) {
             this.updateHealthBarPosition();
         }
+    }
+
+    private canHurtPlayer(): boolean {
+        let distance = this.game.physics.arcade.distanceBetween(this, Enemy.player);
+
+        return distance < 80 && (
+                (Enemy.player.x < this.x && this.scale.x < 0 && this.body.touching.left) ||
+                (Enemy.player.x > this.x && this.scale.x > 0 && this.body.touching.right)
+            );
     }
 
     private isPlayerVisible(): boolean {

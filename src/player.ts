@@ -84,7 +84,8 @@ class Player extends Phaser.Sprite {
     }
 
     canHurt(enemy: Phaser.Sprite): boolean {
-        return (enemy.x < this.x && this.scale.x < 0) || (enemy.x > this.x && this.scale.x > 0);
+        let distance = this.game.physics.arcade.distanceBetween(this, enemy);
+        return distance < 80 && ((enemy.x < this.x && this.scale.x < 0) || (enemy.x > this.x && this.scale.x > 0));
     }
 
     hurt(): void {
