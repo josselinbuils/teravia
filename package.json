@@ -3,15 +3,16 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "start": "webpack-dev-server -d --inline --hot --progress --no-info --port 9000",
-    "build": "rimraf ./dist && webpack -p"
+    "build": "rimraf ./dist && webpack -p",
+    "postinstall": "typings install",
+    "start-dev": "webpack-dev-server -d --inline --hot --progress --no-info --port 9000",
+    "start-prod": "node server.js"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^4.0.1",
     "expose-loader": "^0.7.3",
     "html-webpack-plugin": "^2.28.0",
     "phaser": "^2.6.2",
-    "rimraf": "^2.6.1",
     "ts-loader": "^2.0.3",
     "typescript": "^2.3.2",
     "underscore": "^1.8.3",
@@ -19,5 +20,9 @@
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
+    "express": "^4.15.4",
+    "rimraf": "^2.6.1",
+    "serve-static": "^1.12.4",
+    "typings": "^2.1.1"
   }
 }
