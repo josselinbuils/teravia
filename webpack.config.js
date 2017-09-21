@@ -19,10 +19,13 @@ module.exports = {
         new CopyWebpackPlugin([{
             from: './src/assets/game',
             to: './assets'
+        }, {
+            from: './src/style.css',
+            to: './style.css'
         }]),
         new HtmlWebpackPlugin({
-            template: './index.html',
-            inject: 'body',
+            template: './src/index.html',
+            inject: 'body'
         }),
         new webpack.NoEmitOnErrorsPlugin(),
         new webpack.ProvidePlugin({_: 'underscore'})
@@ -43,8 +46,7 @@ module.exports = {
         alias: {
             'phaser': phaser,
             'pixi': pixi,
-            'p2': p2,
+            'p2': p2
         }
-    },
-    // devtool: 'source-map'
+    }
 };
