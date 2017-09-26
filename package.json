@@ -4,7 +4,6 @@
   "description": "",
   "scripts": {
     "build": "rimraf ./dist && webpack -p",
-    "postinstall": "typings install",
     "start-dev": "webpack-dev-server -d --inline --hot --progress --no-info --port 9000",
     "start": "node server.js"
   },
