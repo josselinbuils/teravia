@@ -1,6 +1,6 @@
 import 'pixi';
 import 'p2';
-import * as Phaser from 'phaser';
+import * as Phaser from 'phaser-ce';
 
 const WIDTH = 1365;
 const HEIGHT = 768;
@@ -77,4 +77,4 @@ class Level1 {
     }
 }
 
-export {Level1};
+export { Level1 };

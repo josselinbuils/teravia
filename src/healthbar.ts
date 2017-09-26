@@ -115,4 +115,4 @@ class HealthBar {
     }
 }
 
-export {HealthBar};
+export { HealthBar };

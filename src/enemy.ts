@@ -1,8 +1,8 @@
 import 'pixi';
 import 'p2';
-import * as Phaser from 'phaser';
-import {HealthBar} from './healthbar';
-import {Player} from "./player";
+import * as Phaser from 'phaser-ce';
+import { HealthBar } from './healthbar';
+import { Player } from "./player";
 
 const DEFAULT_ANIMATION_FRAMERATE = 10;
 const INVINCIBLE_DURATION = 2000;
@@ -164,9 +164,9 @@ class Enemy extends Phaser.Sprite {
         let distance = this.game.physics.arcade.distanceBetween(this, Enemy.player);
 
         return distance < 80 && (
-                (Enemy.player.x < this.x && this.scale.x < 0 && this.body.touching.left) ||
-                (Enemy.player.x > this.x && this.scale.x > 0 && this.body.touching.right)
-            );
+            (Enemy.player.x < this.x && this.scale.x < 0 && this.body.touching.left) ||
+            (Enemy.player.x > this.x && this.scale.x > 0 && this.body.touching.right)
+        );
     }
 
     private isPlayerVisible(): boolean {
@@ -188,4 +188,4 @@ class Enemy extends Phaser.Sprite {
     }
 }
 
-export {Enemy};
+export { Enemy };

@@ -1,12 +1,12 @@
 import 'pixi';
 import 'p2';
-import * as Phaser from 'phaser';
+import * as Phaser from 'phaser-ce';
 
-import {Cat} from './cat';
-import {Knight} from './knight';
-import {Level1} from './level1';
-import {Player} from './player';
-import {Enemy} from './enemy';
+import { Cat } from './cat';
+import { Knight } from './knight';
+import { Level1 } from './level1';
+import { Player } from './player';
+import { Enemy } from './enemy';
 
 const WIDTH = 1365;
 const HEIGHT = 768;

@@ -1,7 +1,7 @@
 import 'pixi';
 import 'p2';
-import * as Phaser from 'phaser';
-import {Enemy} from './enemy';
+import * as Phaser from 'phaser-ce';
+import { Enemy } from './enemy';
 
 class Cat extends Enemy {
 
@@ -74,4 +74,4 @@ class Cat extends Enemy {
     }
 }
 
-export {Cat};
+export { Cat };

@@ -1,8 +1,8 @@
 import 'pixi';
 import 'p2';
-import * as Phaser from 'phaser';
+import * as Phaser from 'phaser-ce';
 import * as _ from 'underscore';
-import {HealthBar} from './healthbar';
+import { HealthBar } from './healthbar';
 
 const ACC_X = 10000;
 const DEFAULT_ANIMATION_FRAMERATE = 10;
@@ -212,4 +212,4 @@ class Player extends Phaser.Sprite {
     }
 }
 
-export {Player};
+export { Player };
