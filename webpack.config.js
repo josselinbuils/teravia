@@ -13,7 +13,7 @@ module.exports = {
     output: {
         filename: '[name].bundle.js',
         path: path.resolve('./dist'),
-        publicPath: '/'
+        publicPath: ''
     },
     plugins: [
         new CopyWebpackPlugin([{
