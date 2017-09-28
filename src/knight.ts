@@ -1,7 +1,7 @@
 import 'pixi';
 import 'p2';
 import * as Phaser from 'phaser-ce';
-import { Player } from "./player";
+import { Player } from './player';
 
 class Knight extends Player {
 

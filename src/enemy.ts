@@ -2,7 +2,7 @@ import 'pixi';
 import 'p2';
 import * as Phaser from 'phaser-ce';
 import { HealthBar } from './healthbar';
-import { Player } from "./player";
+import { Player } from './player';
 
 const DEFAULT_ANIMATION_FRAMERATE = 10;
 const INVINCIBLE_DURATION = 2000;
