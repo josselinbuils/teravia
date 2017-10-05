@@ -61,6 +61,8 @@ class Teravia {
         this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.game.scale.setResizeCallback(this.setMaxDimensions, this);
 
+        this.game.input.mspointer.capture = false;
+
         let fKey = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
         fKey.onDown.add(() => {
             if (this.game.scale.isFullScreen) {
