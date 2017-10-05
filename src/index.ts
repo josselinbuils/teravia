@@ -23,24 +23,24 @@ class Teravia {
         this.game = new Phaser.Game(WIDTH, HEIGHT, Phaser.AUTO, 'content', this);
     }
 
-    preload(game: Phaser.Game): void {
-        // game.time.advancedTiming = true;
-        Cat.loadAssets(game);
-        Level1.loadAssets(game);
-        Knight.loadAssets(game);
+    preload(): void {
+        this.game.time.advancedTiming = true;
+        Cat.loadAssets(this.game);
+        Level1.loadAssets(this.game);
+        Knight.loadAssets(this.game);
     }
 
-    create(game: Phaser.Game): void {
-        game.physics.startSystem(Phaser.Physics.ARCADE);
+    create(): void {
+        this.game.physics.startSystem(Phaser.Physics.ARCADE);
 
         // TILE_BIAS is an unknown property
-        (<any> game.physics.arcade).TILE_BIAS = TILE_BIAS;
+        (<any> this.game.physics.arcade).TILE_BIAS = TILE_BIAS;
 
-        this.cursors = game.input.keyboard.createCursorKeys();
+        this.cursors = this.game.input.keyboard.createCursorKeys();
 
-        this.level = new Level1(game);
+        this.level = new Level1(this.game);
 
-        this.enemies = game.add.group();
+        this.enemies = this.game.add.group();
 
         for (let i = 0; i < 4; i++) {
             this.enemies.add(<Enemy> new Cat(this.game, 400 + (i * 750), HEIGHT - 205, i % 2 === 0 ? 1 : -1));
@@ -50,22 +50,30 @@ class Teravia {
         this.enemies.add(<Enemy> new Cat(this.game, 4680, HEIGHT - 205, 1));
 
         // Must be added after enemies
-        this.player = new Knight(game, 30, HEIGHT / 2);
+        this.player = new Knight(this.game, 30, HEIGHT / 2);
         Cat.setPlayer(this.player);
 
-        game.camera.follow(this.player);
+        this.game.camera.follow(this.player);
 
-        game.physics.arcade.gravity.y = 3000;
+        this.game.physics.arcade.gravity.y = 3000;
 
-        game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.game.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+        this.game.scale.setResizeCallback(this.setMaxDimensions, this);
 
-        let fKey = game.input.keyboard.addKey(Phaser.Keyboard.F);
-        fKey.onDown.add(() => game.scale.startFullScreen(), this);
+        let fKey = this.game.input.keyboard.addKey(Phaser.Keyboard.F);
+        fKey.onDown.add(() => {
+            if (this.game.scale.isFullScreen) {
+                this.game.scale.stopFullScreen();
+            } else {
+                this.game.scale.startFullScreen();
+            }
+        }, this);
 
-        let escapeKey = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
-        escapeKey.onDown.add(() => game.scale.stopFullScreen(), this);
+        let escapeKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ESC);
+        escapeKey.onDown.add(() => this.game.scale.stopFullScreen(), this);
 
-        let spaceKey = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        let spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
         spaceKey.onDown.add(() => {
             if (this.player.attack()) {
                 this.enemies.forEach(function (enemy) {
@@ -77,14 +85,12 @@ class Teravia {
         }, this);
     }
 
-    update(game: Phaser.Game): void {
+    update(): void {
         let cursors = this.cursors,
             player = this.player;
 
-        // game.debug.text(game.time.fps || '--', 2, 14, '#00ff00');
-
-        game.physics.arcade.collide(this.player, this.level.ground);
-        game.physics.arcade.collide(this.enemies, this.level.ground);
+        this.game.physics.arcade.collide(this.player, this.level.ground);
+        this.game.physics.arcade.collide(this.enemies, this.level.ground);
 
         if (this.player.alive) {
             this.enemies.forEach(enemy => enemy.alive && this.game.physics.arcade.collide(this.player, enemy), this);
@@ -114,10 +120,20 @@ class Teravia {
         }
     }
 
-    render(game: Phaser.Game): void {
-        // game.debug.bodyInfo(this.player, 32, 32);
-        // game.debug.body(this.player);
-        // game.debug.body(this.enemies.getAt(0));
+    render(): void {
+        this.game.debug.text(this.game.time.fps.toString() || '--', this.game.width - 30, 20, '#2b5158');
+        // this.game.debug.bodyInfo(this.player, 32, 32);
+        // this.game.debug.body(this.player);
+        // this.game.debug.body(<Phaser.Sprite> this.enemies.getAt(0));
+    }
+
+    private setMaxDimensions() {
+        const gameRatio = this.game.scale.sourceAspectRatio;
+        const screenRatio = window.innerWidth / window.innerHeight;
+        const scaleToWidth = screenRatio < gameRatio;
+        const maxWidth = Math.min(scaleToWidth ? window.innerWidth : window.innerHeight * gameRatio, WIDTH);
+        const maxHeight = Math.min(scaleToWidth ? window.innerWidth / gameRatio : window.innerHeight, HEIGHT);
+        this.game.scale.setMinMax(0, 0, maxWidth, maxHeight);
     }
 }
 
