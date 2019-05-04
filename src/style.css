@@ -1,4 +1,5 @@
 body {
     background: #1a1d1e;
     margin: 0;
+    overflow: hidden;
 }

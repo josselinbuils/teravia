@@ -8,19 +8,19 @@
     "start": "node server.js"
   },
   "dependencies": {
-    "copy-webpack-plugin": "^4.1.0",
-    "expose-loader": "^0.7.3",
-    "express": "^4.16.1",
+    "copy-webpack-plugin": "^4.6.0",
+    "expose-loader": "^0.7.5",
+    "express": "^4.16.4",
     "html-webpack-plugin": "^2.30.1",
-    "phaser-ce": "^2.8.8",
-    "rimraf": "^2.6.2",
-    "serve-static": "^1.13.1",
-    "ts-loader": "^3.1.1",
-    "typescript": "^2.5.3",
-    "underscore": "^1.8.3",
-    "webpack": "^3.6.0"
+    "phaser-ce": "^2.12.0",
+    "rimraf": "^2.6.3",
+    "serve-static": "^1.13.2",
+    "ts-loader": "^3.5.0",
+    "typescript": "^2.9.2",
+    "underscore": "^1.9.1",
+    "webpack": "^3.12.0"
   },
   "devDependencies": {
-    "webpack-dev-server": "^2.9.1"
+    "webpack-dev-server": "^2.11.5"
   }
 }
